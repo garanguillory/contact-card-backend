@@ -11,27 +11,24 @@ module.exports = function(app) {
 	app.get('/', requireAuth, function(req, res) {
 	  res.send({ message: 'Tokenized' });
 	});
+		
 
-	// app.post('/contactcard', requireAuth, function(req, res) {
-	// 	User.findOne({ email: email }, function(err, user) {
-	// 	  if (err) { return done(err); }
-	// 	  if (!user) { return done(null, false); }
+	app.get('/contactcard/:id', requireAuth, function(req, res) {
+		var id = req.params.id;
+		console.log("id: ", id);
+		User.findById(id, function(err, user) {
+		  if (err) { return done(err); }
+		  if (!user) { return done(null, false); }
+		  res.send({userInfo: user});
+		});
+	});
 
-	// 	  res.send({userInfo: user});
 
-	// 	  done();
-	// 	  // user.comparePassword(password, function(err, isMatch) {
-	// 	  //   if (err) { return done(err); }
-	// 	  //   if (!isMatch) { return done(null, false); }
+	// add requireAuth
+	app.put('/contactcard/:id', function(req, res) {
 
-	// 	  //   return done(null, user);
-	// 	  // });
-	// 	});
-	//   // res.send({ message: 'contactcard' });
-	// });
-
-	app.put('/contactcard', function(req, res) {
-		var id = req.body.id;
+		var id = req.params.id;
+		console.log("id: ", id);
 		var email = req.body.email;
 		var first_name = req.body.first_name;
 		var last_name = req.body.last_name;
@@ -40,19 +37,20 @@ module.exports = function(app) {
 		console.log('route hit');
 		console.log('req.body: ', req.body);
 	
-		User.findOneAndUpdate({email: email}, {$set: {"email": email, "first_name": first_name, "last_name": last_name, "photo_url": photo_url}}, {new:true} )
+		User.findByIdAndUpdate(id, {$set: {"email": email, "first_name": first_name, "last_name": last_name, "photo_url": photo_url}}, {new:true} )
 			  .then(function(user) {
 			    console.log("user: ", user);
 			    // res.status(200).json({
 			    //   status: 'success',
-			    //   data: post
+			    //   data: user
 			    // });
-			    return res.send({
-			    	email: email,
-			    	first_name: first_name,
-			    	last_name: last_name,
-			    	photo_url: photo_url
-			    });
+			    res.send({userInfo: user});
+					// res.send({
+			  //   	email: email,
+			  //   	first_name: first_name,
+			  //   	last_name: last_name,
+			  //   	photo_url: photo_url
+			  //   });
 			  })
 			  .catch(function (err) {
 			    return next(err);

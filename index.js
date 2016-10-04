@@ -11,6 +11,7 @@ const cors = require('cors');
 mongoose.Promise = global.Promise;
 
 mongoose.connect('mongodb://localhost:auth/contact-card');
+// mongoose.connect('mongodb://heroku_dbdzf73n:ogu1vjqksc47m45lv05srqq0vp@ds051595.mlab.com:51595/heroku_dbdzf73n');
 
 
 app.use(morgan('combined'));
