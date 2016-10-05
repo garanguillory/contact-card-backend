@@ -52,8 +52,8 @@ exports.signup = function(req, res, next){
 
 			user.save(function(err){
 				if(err){ return next(err); }
-					console.log('anything');
 				res.json({
+					id: user._id,
 					token: userToken(user),
 					email: user.email,
 					photo_url: "http://placehold.it/400x400"
