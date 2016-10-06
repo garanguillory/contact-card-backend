@@ -11,6 +11,9 @@ module.exports = function(app) {
 	app.get('/', requireAuth, function(req, res) {
 	  res.send({ message: 'Tokenized' });
 	});
+
+	app.post('/signup', Authentication.signup);
+	app.post('/login', requireLogin, Authentication.login);
 		
 
 	app.get('/contactcard/:id', requireAuth, function(req, res) {
@@ -28,7 +31,6 @@ module.exports = function(app) {
 	app.put('/contactcard/:id', function(req, res) {
 
 		var id = req.params.id;
-		console.log("id: ", id);
 		var email = req.body.email;
 		var first_name = req.body.first_name;
 		var last_name = req.body.last_name;
@@ -40,11 +42,6 @@ module.exports = function(app) {
 	
 		User.findByIdAndUpdate(id, {$set: {"email": email, "first_name": first_name, "last_name": last_name, "description": description, "photo_url": photo_url}}, {new:true} )
 			  .then(function(user) {
-			    console.log("user: ", user);
-			    // res.status(200).json({
-			    //   status: 'success',
-			    //   data: user
-			    // });
 			    res.status(200).send({userInfo: user});
 			  })
 			  .catch(function (err) {
@@ -53,18 +50,13 @@ module.exports = function(app) {
 	});
 
 
-	app.post('/signup', Authentication.signup);
-	app.post('/login', requireLogin, Authentication.login);
-
-	// delete user (need to add id)
-	app.delete('/contactcard', function(req, res, next){
-		var email = req.body.email;
-		console.log("email: ", email);
-		User.findOneAndRemove({email: email})
-			  .then(function(user) {
+	app.delete('/contactcard/:id', function(req, res, next){
+		var id = req.params.id;
+		console.log("id: ", id);
+		User.findByIdAndRemove(id)
+			  .then(function() {
 			    res.status(200).json({
-			      status: 'user deleted',
-			      data: user
+			      status: 'user deleted'
 			    });
 			  })
 			  .catch(function (err) {
