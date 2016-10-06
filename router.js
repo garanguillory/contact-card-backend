@@ -32,25 +32,20 @@ module.exports = function(app) {
 		var email = req.body.email;
 		var first_name = req.body.first_name;
 		var last_name = req.body.last_name;
+		var description = req.body.description;
 		var photo_url = req.body.photo_url;
 
 		console.log('route hit');
 		console.log('req.body: ', req.body);
 	
-		User.findByIdAndUpdate(id, {$set: {"email": email, "first_name": first_name, "last_name": last_name, "photo_url": photo_url}}, {new:true} )
+		User.findByIdAndUpdate(id, {$set: {"email": email, "first_name": first_name, "last_name": last_name, "description": description, "photo_url": photo_url}}, {new:true} )
 			  .then(function(user) {
 			    console.log("user: ", user);
 			    // res.status(200).json({
 			    //   status: 'success',
 			    //   data: user
 			    // });
-			    res.send({userInfo: user});
-					// res.send({
-			  //   	email: email,
-			  //   	first_name: first_name,
-			  //   	last_name: last_name,
-			  //   	photo_url: photo_url
-			  //   });
+			    res.status(200).send({userInfo: user});
 			  })
 			  .catch(function (err) {
 			    return next(err);
@@ -61,7 +56,7 @@ module.exports = function(app) {
 	app.post('/signup', Authentication.signup);
 	app.post('/login', requireLogin, Authentication.login);
 
-	// delete user
+	// delete user (need to add id)
 	app.delete('/contactcard', function(req, res, next){
 		var email = req.body.email;
 		console.log("email: ", email);

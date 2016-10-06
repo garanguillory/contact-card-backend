@@ -47,6 +47,7 @@ exports.signup = function(req, res, next){
 				password: password,
 				first_name: '',
 				last_name: '',
+				description: '',
 				photo_url: 'http://placehold.it/400x400'
 			});
 
