@@ -34,12 +34,12 @@ exports.signup = function(req, res, next){
 	}
 
 
-	User.findOne({ email: email }, function(err, existing){
+	User.findOne({email: email}, function(err, existing){
 			if(err){
 				return next(err);
 			}
 			if(existing) {
-				return res.status(422).send({error: 'That email address is taken!'})
+				return res.status(422).json({error: 'That email address is taken!'})
 			}
 
 			const user = new User({
